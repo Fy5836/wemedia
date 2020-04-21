@@ -1,0 +1,67 @@
+<nav id ="navbar" th:fragment="navbar" class="navbar navbar-default ">
+    <div class="zb-container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+							<span class="sr-only">
+								Toggle navigation
+							</span>
+                <span class="icon-bar">
+							</span>
+                <span class="icon-bar">
+							</span>
+                <span class="icon-bar">
+							</span>
+            </button>
+
+        </div>
+        <div class="collapse navbar-collapse " aria-expanded="false">
+            <ul class="nav navbar-nav navbar-left">
+                <li th:class="${categoryId=='index' ? 'active' : ''} ">
+                    <a th:href="@{/}">
+                        首页
+                    </a>
+                </li>
+                <!--each遍历目录id，class控制点击高亮和下拉列表框-->
+                <li th:each="category:${@module.get('categoryList')}" th:class="${category.id==categoryId ? 'active':(#lists.isEmpty(category.nodes)?'':'dropdown')}">
+                    <!--一级目录-->
+                    <a th:if="${category.pid==null||category.pid==0}" th:href="@{${not #lists.isEmpty(category.nodes)? '#': ('/blog/category/' + category.id)}}" th:class="${#lists.isEmpty(category.nodes)?'':'dropdown-toggle'}" th:data-toggle="${#lists.isEmpty(category.nodes)?'':'dropdown'}">
+                        <span th:text="${category.name}"></span>
+                        <!--点击按钮出现下拉菜单-->
+                        <b th:if="${not #lists.isEmpty(category.nodes)}" class="caret"></b>
+                    </a>
+                    <!--二级目录：控制下拉框-->
+                    <ul th:if="${not #lists.isEmpty(category.nodes)}" class="dropdown-menu">
+                        <li th:each="node:${category.nodes}"><a th:href="@{${'/blog/category/' + node.id}}" th:text="${node.name}"></a></li>
+                    </ul>
+                </li>
+                <li class="">
+                    <a href="/blog/comment" th:class="${categoryId=='comment' ? 'active' : ''} ">
+                        留言板
+                    </a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#">
+                        <i  class="fa fa-search search-btn"></i>
+                    </a>
+                </li>
+
+                <li class="nav nav-pills">
+                    <a href="#">发表文章</a>
+                </li>
+                <li class="nav nav-pills">
+                    <a href="#">消息
+                        <span class="badge"></span>
+                    </a>
+                </li>
+                <li class="nav nav-pills">
+                    <a href="#">VIP</a>
+                </li>
+                <li class="nav nav-pills">
+                    <a href="#">登录</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
